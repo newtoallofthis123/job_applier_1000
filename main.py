@@ -1,7 +1,12 @@
 from helpers.file import setup_file_handlers
 from helpers.pdf import PdfExtractor
 from helpers.parsers.resume import ResumeParser
-from model.cover_letter import find_tokens, generate_cover_letter, replace_tokens
+from model.cover_letter import (
+    find_tokens,
+    generate_cover_letter,
+    replace_tokens,
+    save_pdf,
+)
 
 setup_file_handlers()
 
@@ -70,3 +75,15 @@ for t in tokens:
 res = replace_tokens(res, vals)
 
 print(res)
+
+a = f"""
+---
+title: Cover Letter
+author: {resume['name']}
+geometry: margin=0.5in
+---
+"""
+
+a += res
+
+save_pdf(a, f"{resume['name']}_Cover_Letter.pdf")

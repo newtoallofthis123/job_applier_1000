@@ -1,6 +1,7 @@
 from typing import Any, Iterable, Mapping
 from helpers.parsers.resume import re
 from model.connect import get_ollama_response
+import subprocess
 
 
 def generate_cover_letter(info: dict) -> Iterable[Mapping[str, Any]]:
@@ -60,7 +61,7 @@ def generate_cover_letter(info: dict) -> Iterable[Mapping[str, Any]]:
     """
 
     prompt += """
-    NOTE: 
+    - Generate content in Markdown format
     - Don't include an address in the cover letter.
     - Be polite and professional.
     - Be concise, yet get the point across.
@@ -82,3 +83,18 @@ def replace_tokens(haystack, tokens):
         haystack = haystack.replace("[" + token + "]", tokens[token])
 
     return haystack
+
+
+def save_pdf(content, path):
+    cmd = subprocess.run(
+        ["pandoc", "-o", path, "-f", "markdown"],
+        input=content,
+        text=True,
+        capture_output=True,
+    )
+
+    if cmd.returncode == 0:
+        print("PDF generated successfully: " + path)
+    else:
+        print("Error occurred:")
+        print(cmd.stderr)
