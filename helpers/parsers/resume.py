@@ -63,8 +63,7 @@ class ResumeParser:
     def parse(self) -> dict:
         email = self.parse_email()
         phone = self.parse_mobile()
-        name = self.parse_candidate_name()
-        sections = []
+        name = self.parse_candidate_name().title()
 
         res = {
             "name": name,
